@@ -12,11 +12,19 @@
 
 //jset.fn() 을 이용해서 가짜 함수를 생성
 
-const productController = require('../../controller/products')
+const productController = require('../../controller/products');
+const productModel = require('../../models/Product');
+
+productModel.create = jest.fn();
 
 describe("Product Controller Create", () => {
     //test 대신 it라고 써도 됨
     test('should have a createProduct function', () => {
         expect(typeof productController.createProduct).toBe("function");
     });
+    test('should call ProductModel.create', () => {
+        productController.createProduct();
+        expect(productModel.create).toBeCalled();
+    })
+    
 });
