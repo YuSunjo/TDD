@@ -5,7 +5,7 @@ const app = express();
 const productRoutes = require('./routes');
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb+srv://root:1234@cluster0.8szhx.mongodb.net/hello?retryWrites=true&w=majority",
+mongoose.connect("mongodb+srv://root:1234@cluster0.8szhx.mongodb.net/product?retryWrites=true&w=majority",
 {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -15,6 +15,9 @@ mongoose.connect("mongodb+srv://root:1234@cluster0.8szhx.mongodb.net/hello?retry
 
 app.use('/api/products', productRoutes);
 app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}))
 
 app.get('/', (req, res) => {
     res.send('hello world');
