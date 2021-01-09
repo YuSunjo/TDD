@@ -40,6 +40,18 @@ describe("Product Controller Create", () => {
     test('should call ProductModel.create', () => {
         productController.createProduct(req, res, next);
         expect(productModel.create).toBeCalledWith(newProduct);
+    });
+    test('should return 201 response code', () => {
+        productController.createProduct(req, res, next);
+        expect(res.statusCode).toBe(201);
+        expect(res._isEndCalled()).toBeTruthy();
     })
+    test('should return json body in response', () => {
+        productModel.create.mockReturnValue(newProduct)
+        productController.createProduct(req, res, next);
+        expect(res._getJONData()).toStrictEqual(newProduct);
+    })
+    
+    
     
 });
