@@ -13,7 +13,7 @@
 //jset.fn() 을 이용해서 가짜 함수를 생성
 
 const productController = require('../../controller/products');
-const productModel = require('../../models/Product').default;
+const productModel = require('../../models/Product');
 
 //req, res 를 jest에서 생성
 const httpMocks = require('node-mocks-http');
@@ -25,7 +25,7 @@ let req, res, next;
 beforeEach(() => {
     req = httpMocks.createRequest();
     res = httpMocks.createResponse();
-    next = null;
+    next = jest.fn();;
 });
 
 describe("Product Controller Create", () => {
@@ -49,8 +49,17 @@ describe("Product Controller Create", () => {
     test('should return json body in response',async () => {
         productModel.create.mockReturnValue(newProduct)
         await productController.createProduct(req, res, next);
-        expect(res._getJONData()).toStrictEqual(newProduct);
+        expect(res._getJSONData()).toStrictEqual(newProduct);
     })
+
+    test('should handle errors', async () => {
+        const errorMessage = { message: "descripttion property missing" };
+        const rejectedPromise = Promise.reject(errorMessage);
+        productModel.create.mockReturnValue(rejectedPromise);
+        await productController.createProduct(req, res, next);
+        expect(next).toBeCalledWith(errorMessage);
+    })
+    
     
     
     
