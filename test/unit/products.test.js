@@ -21,16 +21,23 @@ const newProduct = require('../data/new-product.json');
 
 productModel.create = jest.fn();
 
+let req, res, next;
+beforeEach(() => {
+    req = httpMocks.createRequest();
+    res = httpMocks.createResponse();
+    next = null;
+});
+
 describe("Product Controller Create", () => {
+
+    beforeEach(() => {
+        req.body = newProduct;
+    })
     //test 대신 it라고 써도 됨
     test('should have a createProduct function', () => {
         expect(typeof productController.createProduct).toBe("function");
     });
     test('should call ProductModel.create', () => {
-        let req = httpMocks.createRequest();
-        let res = httpMocks.createResponse();
-        let next = null;
-        req.body = newProduct;
         productController.createProduct(req, res, next);
         expect(productModel.create).toBeCalledWith(newProduct);
     })
