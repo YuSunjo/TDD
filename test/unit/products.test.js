@@ -94,7 +94,7 @@ describe('Product Controller Get', () => {
 
 describe('product Controller GetById', () => {
     test('should have a getProductById', () => {
-        expect(typeof productController.getProductById).toBe('funtion');
+        expect(typeof productController.getProductById).toBe('function');
     })
     test('should call productMode.findById',async () => {
         req.params.productId = productId
