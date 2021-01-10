@@ -14,3 +14,12 @@ test('should Post api/products', async () => {
     expect(response.body.description).toBe(newProduct.description)
 })
 
+test('should return 500 on Post /api/products', async () => {
+    const response = await request(app)
+    .post('/api/products')
+    .send({name:"phone"})
+    expect(response.statusCode).toBe(500);
+    console.log('response.body', response.body);
+    expect(response.body).toStrictEqual({message: "Product validation failed: description: Path `description` is required."})
+})
+
