@@ -11,6 +11,16 @@ exports.createProduct = async (req, res, next) => {
     
 };
 
+exports.getProducts = async (req, res, next) => {
+    try{
+        const allProducts = await productModel.find({});
+        res.status(200).json(allProducts);
+    }catch(error){
+        next(error);
+    }
+    
+}
+
 //create(req.body).then(response => {         이런식으로 해줘도 됨
 
 //})
