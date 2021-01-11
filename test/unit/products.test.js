@@ -24,6 +24,7 @@ productModel.create = jest.fn();
 productModel.find = jest.fn();
 productModel.findById = jest.fn();
 productModel.findByIdAndUpdate = jest.fn();
+productModel.findByIdAndDelete = jest.fn();
 
 const productId = "sdfsdfsdfsdf";
 const updatedProduct = {name: "updated name", description: "updated desc"}
@@ -126,7 +127,7 @@ describe('product Controller GetById', () => {
     
 })
 
-describe('Product Controller update', async () => {
+describe('Product Controller update', () => {
     test('should have an upudateProduct function', () => {
         expect(typeof productController.updateProduct).toBe('function');
     })
@@ -163,10 +164,43 @@ describe('Product Controller update', async () => {
         await productController.updateProduct(req, res, next);
         expect(next).toHaveBeenCalledWith(errorMessage);
     })
+})
+
+describe('should Controller delete', () => {
+    test('should function', () => {
+        expect(typeof productController.deleteProduct).toBe('function');
+    })
+    test('should ProductModel.findByIdAndDelete', async () => {
+        req.params.productId = productId;
+        await productController.deleteProduct(req, res, next)
+        expect(productModel.findByIdAndDelete).toBeCalledWith(productId)
+    })
+    test('should return 200 response', async () => {
+        let deletedProduct = {name: "deleted Product", description: "deleted desc"}
+        productModel.findByIdAndDelete.mockReturnValue(deletedProduct)
+        await productController.deleteProduct(req, res, next)
+        expect(res.statusCode).toBe(200)
+        expect(res._getJSONData()).toStrictEqual(deletedProduct)
+        expect(res._isEndCalled()).toBeTruthy();
+    })
+    test('should return 404 response', async () => {
+        productModel.findByIdAndDelete.mockReturnValue(null);
+        await productController.deleteProduct(req, res,next)
+        expect(res.statusCode).toBe(404)
+        expect(res._isEndCalled()).toBeTruthy();
+    })
+    test('should error', async () => {
+        const errorMessage = {message: "error"};
+        const rejectedPromise = Promise.reject(errorMessage);
+        productModel.findByIdAndDelete.mockReturnValue(rejectedPromise);
+        await productController.deleteProduct(req, res, next);
+        expect(next).toHaveBeenCalledWith(errorMessage);
+    })
     
     
     
 })
+
 
 
 

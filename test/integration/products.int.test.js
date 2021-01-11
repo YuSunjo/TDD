@@ -55,6 +55,16 @@ test('should updated deosnt exist /api/products/:productId', async () => {
     .send({name: "updated name", description: "updated desc"})
     expect(response.statusCode).toBe(404);
 })
+test('should delete /api/products',async () => {
+    const res = await request(app).delete('/api/products/'+firstProduct._id).send();
+    expect(res.statusCode).toBe(200);
+})
+test('should delete test /api/products/:productId', async () => {
+    const response = await request(app).delete('/api/products/5ffa50df3dab7bb2d8421647')
+    .send()
+    expect(response.statusCode).toBe(404);
+})
+
 
 
 
