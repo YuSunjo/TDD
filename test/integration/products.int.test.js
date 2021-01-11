@@ -43,4 +43,18 @@ test('should get id doesnt exist /api/products/:prodcutId ',async () => {
     const response = await request(app).get('/api/products/5ffa50df3dab7bb2d8421647')
     expect(response.statusCode).toBe(404);
 })
+test('put /api/products', async () => {
+    const res = await request(app).put('/api/products/'+firstProduct._id)
+    .send({ name: "updated name", description:"updated desc" });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.name).toBe("updated name");
+    expect(res.body.description).toBe("updated desc");
+})
+test('should updated deosnt exist /api/products/:productId', async () => {
+    const response = await request(app).put('/api/produts/5ffa50df3dab7bb2d8421647')
+    .send({name: "updated name", description: "updated desc"})
+    expect(response.statusCode).toBe(404);
+})
+
+
 
